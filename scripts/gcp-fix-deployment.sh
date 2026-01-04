@@ -11,9 +11,9 @@ CURRENT_DIR=$(pwd)
 echo "Current directory: $CURRENT_DIR"
 
 # Navigate to the correct directory
-cd ~/collision-detection-system/raspberry-pi || {
-    echo "Error: Could not find collision-detection-system directory"
-    echo "Please make sure you cloned the repository to ~/collision-detection-system"
+cd ~/Collision-web/raspberry-pi || {
+    echo "Error: Could not find Collision-web directory"
+    echo "Please make sure you cloned the repository to ~/Collision-web"
     exit 1
 }
 
@@ -201,13 +201,13 @@ After=network.target
 Type=simple
 User=$(whoami)
 Group=$(whoami)
-WorkingDirectory=/home/$(whoami)/collision-detection-system/raspberry-pi
-Environment=PATH=/home/$(whoami)/collision-detection-system/raspberry-pi/venv/bin
-ExecStart=/home/$(whoami)/collision-detection-system/raspberry-pi/venv/bin/python /home/$(whoami)/collision-detection-system/raspberry-pi/production_server.py
+WorkingDirectory=/home/$(whoami)/Collision-web/raspberry-pi
+Environment=PATH=/home/$(whoami)/Collision-web/raspberry-pi/venv/bin
+ExecStart=/home/$(whoami)/Collision-web/raspberry-pi/venv/bin/python /home/$(whoami)/Collision-web/raspberry-pi/production_server.py
 Restart=always
 RestartSec=10
 
-EnvironmentFile=/home/$(whoami)/collision-detection-system/raspberry-pi/.env
+EnvironmentFile=/home/$(whoami)/Collision-web/raspberry-pi/.env
 
 StandardOutput=journal
 StandardError=journal
@@ -223,12 +223,12 @@ sudo systemctl enable collision-detection
 
 # Copy the production server script
 echo "Setting up production server script..."
-cp ~/collision-detection-system/scripts/gcp-production-server.py ./production_server.py
+cp ~/Collision-web/scripts/gcp-production-server.py ./production_server.py
 chmod +x production_server.py
 
 # Copy the simple web interface
 mkdir -p static
-cp ~/collision-detection-system/scripts/gcp-simple-web.html ./static/index.html
+cp ~/Collision-web/scripts/gcp-simple-web.html ./static/index.html
 
 # Test the server manually first
 echo ""
