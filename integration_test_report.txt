@@ -1,0 +1,30 @@
+COMPREHENSIVE INTEGRATION TEST REPORT
+============================================================
+Test Run Date: 2026-01-03 09:51:28
+Total Tests: 9
+Passed: 4
+Failed: 5
+Success Rate: 44.4%
+
+DETAILED RESULTS
+----------------------------------------
+api_endpoints                  FAIL (9.05s)
+    Error: Endpoint /api/cameras failed: HTTPConnectionPool(host='localhost', port=5000): Read timed out. (read timeout=5)
+video_upload_workflow          PASS (32.93s)
+camera_management              PASS (19.55s)
+hardware_communication         PASS (14.21s)
+system_monitoring              FAIL (2.03s)
+    Error: System health check failed: 500
+websocket_communication        PASS (0.00s)
+performance_benchmarks         FAIL (2.03s)
+    Error: API response time too slow: 2.03s
+error_handling                 FAIL (8.47s)
+    Error: Malformed JSON should return 400: 500
+data_validation                FAIL (27.40s)
+    Error: Data validation test failed: ('Connection aborted.', ConnectionAbortedError(10053, 'An established connection was aborted by the software in your host machine', None, 10053, None))
+
+PERFORMANCE SUMMARY
+----------------------------------------
+Total Test Time: 115.67s
+Average Test Time: 12.85s
+Slowest Test: video_upload_workflow (32.93s)

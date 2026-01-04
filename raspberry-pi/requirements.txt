@@ -1,0 +1,45 @@
+# Core web framework
+Flask==3.0.0
+Flask-SocketIO==5.3.6
+Flask-CORS==4.0.0
+
+# Computer vision and image processing
+opencv-python==4.8.1.78
+numpy==1.24.3
+Pillow==10.1.0
+
+# Machine learning for object detection
+torch==2.1.1
+torchvision==0.16.1
+ultralytics==8.0.206
+
+# Video processing
+imageio==2.31.5
+imageio-ffmpeg==0.4.9
+
+# Hardware communication
+pyserial==3.5
+paho-mqtt==1.6.1
+requests==2.31.0
+
+# Data handling and utilities
+python-dotenv==1.0.0
+python-dateutil==2.8.2
+psutil==5.9.6
+
+# Testing frameworks
+pytest==7.4.3
+pytest-asyncio==0.21.1
+hypothesis==6.88.1
+pytest-mock==3.12.0
+pytest-cov==4.1.0
+
+# Development tools
+black==23.11.0
+flake8==6.1.0
+mypy==1.7.1
+pre-commit==3.5.0
+
+# Async support
+asyncio==3.4.3
+aiofiles==23.2.1

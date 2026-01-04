@@ -1,0 +1,19 @@
+Metadata-Version: 2.4
+Name: collision-detection-server
+Version: 1.0.0
+Summary: Raspberry Pi server for collision detection with computer vision and IoT control
+Author: Collision Detection Team
+Author-email: Collision Detection Team <team@collisiondetection.com>
+License: MIT
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Dynamic: author
+Dynamic: requires-python

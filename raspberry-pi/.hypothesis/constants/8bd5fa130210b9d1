@@ -1,0 +1,4 @@
+# file: D:\Senthil Coding\WEb\Collision_web\raspberry-pi\src\collision_server\hardware_controller.py
+# hypothesis_version: 6.148.9
+
+[1.0, 2.0, 5.0, 10.0, 30.0, -500, 200, 1000, 1024, 8888, 8889, 8890, '/tmp/collision_logs', '<broadcast>', '_command_id', 'alert', 'alert_type', 'capabilities', 'collision', 'command', 'command_port', 'connection', 'device_id', 'device_type', 'disconnection', 'discovery', 'discovery_interval', 'discovery_port', 'discovery_response', 'discovery_timeout', 'esp8266', 'failed', 'free_memory', 'info', 'ip_address', 'log_directory', 'message', 'network_timeout', 'offline', 'online', 'parameters', 'pending', 'reason', 'sensor_data', 'status', 'status_port', 'success', 'timestamp', 'type', 'unknown', 'uptime', 'warning', 'wifi_strength']

@@ -1,0 +1,157 @@
+# Project-wide gitignore for Collision Detection System
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE and Editor Files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Web Application (JavaScript/Node.js)
+web/node_modules/
+web/dist/
+web/build/
+web/.env.local
+web/.env.development.local
+web/.env.test.local
+web/.env.production.local
+web/coverage/
+web/.nyc_output/
+
+# Raspberry Pi Server (Python)
+raspberry-pi/venv/
+raspberry-pi/__pycache__/
+raspberry-pi/*.py[cod]
+raspberry-pi/*$py.class
+raspberry-pi/*.so
+raspberry-pi/.Python
+raspberry-pi/build/
+raspberry-pi/develop-eggs/
+raspberry-pi/dist/
+raspberry-pi/downloads/
+raspberry-pi/eggs/
+raspberry-pi/.eggs/
+raspberry-pi/lib/
+raspberry-pi/lib64/
+raspberry-pi/parts/
+raspberry-pi/sdist/
+raspberry-pi/var/
+raspberry-pi/wheels/
+raspberry-pi/*.egg-info/
+raspberry-pi/.installed.cfg
+raspberry-pi/*.egg
+raspberry-pi/MANIFEST
+raspberry-pi/.env
+raspberry-pi/.pytest_cache/
+raspberry-pi/.coverage
+raspberry-pi/htmlcov/
+raspberry-pi/.mypy_cache/
+raspberry-pi/.dmypy.json
+raspberry-pi/dmypy.json
+raspberry-pi/uploads/
+raspberry-pi/processed/
+raspberry-pi/models/*.pt
+raspberry-pi/models/*.onnx
+
+# ESP8266 Devices (C++/PlatformIO)
+esp8266-devices/.pio/
+esp8266-devices/.vscode/
+esp8266-devices/lib/
+esp8266-devices/.pioenvs/
+esp8266-devices/.piolibdeps/
+esp8266-devices/.clang_complete
+esp8266-devices/.gcc-flags.json
+esp8266-devices/.pio
+esp8266-devices/platformio.ini.bak
+
+# Temporary and Cache Files
+*.tmp
+*.temp
+.cache/
+.parcel-cache/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup Files
+*.bak
+*.backup
+*~
+
+# Compiled Binaries
+*.exe
+*.out
+*.app
+*.bin
+*.hex
+
+# Documentation Build
+docs/_build/
+docs/.doctrees/
+
+# Test Coverage
+coverage/
+.coverage
+.coverage.*
+lcov.info
+
+# Package Files
+*.tar.gz
+*.zip
+*.rar
+
+# Hardware-specific
+*.fuse*
+*.elf
+*.map
+
+# Video and Image Files (for testing)
+test_videos/
+test_images/
+*.mp4
+*.avi
+*.mov
+*.webm
+*.jpg
+*.jpeg
+*.png
+*.gif
+
+# Machine Learning Models (large files)
+*.h5
+*.pkl
+*.pickle
+*.model
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Local Configuration
+config.local.json
+settings.local.json

@@ -1,0 +1,901 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Header styles */
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.tab-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #34495e;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tab-button:hover {
+    background-color: #4a6741;
+}
+
+.tab-button.active {
+    background-color: #3498db;
+}
+
+/* Main content */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.panel {
+    display: none;
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.panel.active {
+    display: block;
+}
+
+/* Video panel */
+.upload-section {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.upload-section h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+#video-upload {
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #ecf0f1;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+#upload-progress-fill {
+    height: 100%;
+    background-color: #3498db;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+.video-display {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+#analysis-video, #live-video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+#collision-overlay, #live-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Live feed panel */
+.camera-controls {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.camera-controls h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+#camera-select {
+    margin-right: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#connect-camera {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: #27ae60;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#connect-camera:hover {
+    background-color: #229954;
+}
+
+.live-display {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+#live-alerts {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 1rem;
+    min-height: 100px;
+}
+
+/* Hardware panel */
+.device-list {
+    margin-bottom: 2rem;
+}
+
+.device-list h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+#device-status {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 1rem;
+    min-height: 150px;
+}
+
+.manual-controls {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.manual-controls h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.logs-section {
+    margin-bottom: 1rem;
+}
+
+.logs-section h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+#hardware-logs {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 1rem;
+    min-height: 200px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    nav {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        padding: 1rem;
+    }
+    
+    .panel {
+        padding: 1rem;
+    }
+}
+
+/* Live Feed Collision Detection Styles */
+.collision-marker {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.collision-marker.live-collision {
+    z-index: 10;
+}
+
+.marker-dot {
+    width: 20px;
+    height: 20px;
+    background-color: #e74c3c;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.marker-pulse {
+    width: 30px;
+    height: 30px;
+    background-color: rgba(231, 76, 60, 0.6);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.marker-label {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(231, 76, 60, 0.9);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Collision Notification Styles */
+.collision-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    max-width: 300px;
+}
+
+.collision-notification.show {
+    transform: translateX(0);
+}
+
+.notification-content strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.notification-content p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+}
+
+/* Alerts Container Styles */
+.alerts-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.alerts-container h4 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+.alert-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-left: 4px solid #f39c12;
+}
+
+.alert-item.high-severity {
+    border-left-color: #e74c3c;
+    background-color: #fdf2f2;
+}
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.alert-time {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.alert-camera {
+    background-color: #3498db;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+
+.alert-severity {
+    background-color: #f39c12;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+}
+
+.alert-item.high-severity .alert-severity {
+    background-color: #e74c3c;
+}
+
+.alert-message {
+    color: #555;
+    margin-bottom: 0.25rem;
+}
+
+.alert-age {
+    font-size: 0.8rem;
+    color: #888;
+    font-style: italic;
+}
+
+/* Connection Status Styles */
+.connection-status {
+    text-align: center;
+    color: #7f8c8d;
+    font-style: italic;
+    padding: 2rem;
+}
+
+/* Error Message Styles */
+.error-message {
+    background-color: #fdf2f2;
+    border: 1px solid #e74c3c;
+    border-radius: 4px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.error-message h4 {
+    color: #e74c3c;
+    margin-bottom: 0.5rem;
+}
+
+.error-message p {
+    color: #721c24;
+}
+
+/* Live Video Enhancements */
+#live-video {
+    background-color: #000;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#live-video:empty::before {
+    content: "No video feed";
+    color: #888;
+    font-style: italic;
+}
+
+/* Button State Styles */
+#connect-camera:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+#connect-camera:disabled:hover {
+    background-color: #95a5a6;
+}
+
+/* Scrollbar Styles for Alerts */
+.alerts-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.alerts-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.alerts-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.alerts-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Hardware Interface Styles */
+.device-list {
+    position: relative;
+}
+
+.device-list button {
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    border-color: #95a5a6;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+    border-color: #7f8c8d;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #138496;
+}
+
+.btn-warning {
+    background-color: #f39c12;
+    border-color: #f39c12;
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #e67e22;
+    border-color: #e67e22;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 3px;
+}
+
+/* Device Grid */
+.devices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.device-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s;
+}
+
+.device-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.device-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.device-header h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.device-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-online {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-offline {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.device-info {
+    margin-bottom: 1rem;
+}
+
+.device-info p {
+    margin: 0.25rem 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.health-info {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+}
+
+.health-score, .connectivity {
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.device-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.no-devices {
+    text-align: center;
+    padding: 2rem;
+    color: #7f8c8d;
+}
+
+.no-devices p {
+    margin: 0.5rem 0;
+}
+
+/* Hardware Logs */
+#hardware-logs {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+}
+
+.log-entry {
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+.log-timestamp {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+    min-width: 80px;
+}
+
+.log-message {
+    flex: 1;
+    color: #2c3e50;
+}
+
+.log-info {
+    background-color: #f8f9fa;
+}
+
+.log-warning {
+    background-color: #fff3cd;
+    border-left: 3px solid #ffc107;
+}
+
+.log-error {
+    background-color: #f8d7da;
+    border-left: 3px solid #dc3545;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    background-color: #f8f9fa;
+    border-radius: 8px 8px 0 0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #7f8c8d;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: #2c3e50;
+}
+
+.modal-body {
+    padding: 1rem;
+}
+
+/* Device Status Modal */
+.device-status-details h4 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.5rem;
+}
+
+.status-grid, .health-grid, .sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.status-item, .health-item, .sensor-item {
+    background-color: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 4px;
+    border-left: 3px solid #3498db;
+}
+
+.status-item label, .health-item label, .sensor-item label {
+    display: block;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.status-value, .health-value, .sensor-value {
+    color: #555;
+    font-size: 1rem;
+}
+
+/* Device Logs Modal */
+.device-logs h5 {
+    margin: 1rem 0 0.5rem 0;
+    color: #2c3e50;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.25rem;
+}
+
+.logs-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.command-log {
+    background-color: #f8f9fa;
+}
+
+.device-log {
+    background-color: #fff;
+}
+
+.log-action, .log-event {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.log-status, .log-severity {
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-failed {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.severity-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.severity-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.severity-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Connection Status Indicator */
+#hardware-connection-status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-left: 1rem;
+}
+
+.status-connected {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-disconnected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Responsive Design for Hardware Interface */
+@media (max-width: 768px) {
+    .devices-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .device-controls {
+        justify-content: center;
+    }
+    
+    .status-grid, .health-grid, .sensor-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .device-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .device-controls .btn {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+}

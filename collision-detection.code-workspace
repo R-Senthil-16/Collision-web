@@ -1,0 +1,190 @@
+{
+    "folders": [
+        {
+            "name": "Web Application",
+            "path": "./web"
+        },
+        {
+            "name": "Raspberry Pi Server",
+            "path": "./raspberry-pi"
+        },
+        {
+            "name": "ESP8266 Devices",
+            "path": "./esp8266-devices"
+        },
+        {
+            "name": "Scripts & Config",
+            "path": "./scripts"
+        },
+        {
+            "name": "Specifications",
+            "path": "./.kiro/specs/collision-detection-web"
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "./raspberry-pi/venv/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": [
+            "raspberry-pi/tests"
+        ],
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.formatting.provider": "black",
+        "javascript.preferences.includePackageJsonAutoImports": "auto",
+        "typescript.preferences.includePackageJsonAutoImports": "auto",
+        "platformio-ide.useBuiltinPIOCore": true,
+        "platformio-ide.activateOnlyOnPlatformIOProject": false,
+        "files.associations": {
+            "*.ino": "cpp",
+            "*.h": "cpp"
+        },
+        "C_Cpp.default.includePath": [
+            "${workspaceFolder}/esp8266-devices/include",
+            "${workspaceFolder}/esp8266-devices/lib/**"
+        ],
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+        "jest.jestCommandLine": "npm test --",
+        "jest.autoRun": "off"
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.black-formatter",
+            "ms-python.flake8",
+            "ms-python.mypy-type-checker",
+            "ms-python.pylint",
+            "platformio.platformio-ide",
+            "ms-vscode.cpptools",
+            "ms-vscode.cpptools-extension-pack",
+            "esbenp.prettier-vscode",
+            "bradlc.vscode-tailwindcss",
+            "orta.vscode-jest",
+            "ms-vscode.vscode-json",
+            "redhat.vscode-yaml",
+            "ms-vscode.powershell"
+        ]
+    },
+    "tasks": {
+        "version": "2.0.0",
+        "tasks": [
+            {
+                "label": "Setup Development Environment",
+                "type": "shell",
+                "command": "${workspaceFolder}/scripts/setup-dev-environment.bat",
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                },
+                "problemMatcher": []
+            },
+            {
+                "label": "Build All Components",
+                "type": "shell",
+                "command": "${workspaceFolder}/scripts/build-all.bat",
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                },
+                "problemMatcher": []
+            },
+            {
+                "label": "Test All Components",
+                "type": "shell",
+                "command": "${workspaceFolder}/scripts/test-all.bat",
+                "group": "test",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                },
+                "problemMatcher": []
+            },
+            {
+                "label": "Start Web Development Server",
+                "type": "shell",
+                "command": "npm start",
+                "options": {
+                    "cwd": "${workspaceFolder}/web"
+                },
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "dedicated"
+                },
+                "problemMatcher": []
+            },
+            {
+                "label": "Start Raspberry Pi Server",
+                "type": "shell",
+                "command": "venv\\Scripts\\activate.bat && python -m collision_server.main",
+                "options": {
+                    "cwd": "${workspaceFolder}/raspberry-pi"
+                },
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "dedicated"
+                },
+                "problemMatcher": []
+            },
+            {
+                "label": "Flash ESP8266 Device",
+                "type": "shell",
+                "command": "pio run --target upload",
+                "options": {
+                    "cwd": "${workspaceFolder}/esp8266-devices"
+                },
+                "group": "build",
+                "presentation": {
+                    "echo": true,
+                    "reveal": "always",
+                    "focus": false,
+                    "panel": "shared"
+                },
+                "problemMatcher": []
+            }
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Debug Raspberry Pi Server",
+                "type": "python",
+                "request": "launch",
+                "program": "${workspaceFolder}/raspberry-pi/src/collision_server/main.py",
+                "console": "integratedTerminal",
+                "cwd": "${workspaceFolder}/raspberry-pi",
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}/raspberry-pi/src"
+                },
+                "python": "${workspaceFolder}/raspberry-pi/venv/bin/python"
+            },
+            {
+                "name": "Debug Web Tests",
+                "type": "node",
+                "request": "launch",
+                "program": "${workspaceFolder}/web/node_modules/.bin/jest",
+                "args": ["--runInBand"],
+                "cwd": "${workspaceFolder}/web",
+                "console": "integratedTerminal",
+                "internalConsoleOptions": "neverOpen"
+            }
+        ]
+    }
+}

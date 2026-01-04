@@ -1,0 +1,2 @@
+[console_scripts]
+collision-server = collision_server.main:main
