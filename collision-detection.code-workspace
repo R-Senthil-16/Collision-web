@@ -45,7 +45,7 @@
         ],
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.organizeImports": true
+            "source.organizeImports": "explicit"
         },
         "jest.jestCommandLine": "npm test --",
         "jest.autoRun": "off"
