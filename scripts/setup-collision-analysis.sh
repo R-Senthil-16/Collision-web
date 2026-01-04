@@ -1,173 +1,188 @@
 #!/bin/bash
 
-# Setup Collision Analysis with YOLO Integration
-# Run this INSIDE your Google Cloud VM
+# Setup Collision Analysis Server on Google Cloud Platform
+# This script installs dependencies and deploys the integrated collision detection server
 
-echo "=== Setting up Collision Analysis with YOLO Integration ==="
-echo ""
+set -e
 
-# Navigate to project directory
-cd ~/Collision-web/raspberry-pi || {
-    echo "Error: Could not find project directory"
-    exit 1
-}
+echo "=== Setting up Collision Detection with Video Analysis ==="
 
-echo "Working directory: $(pwd)"
+# Update system packages
+echo "📦 Updating system packages..."
+sudo apt-get update -y
 
-# Stop current service
-echo "Stopping current service..."
-sudo systemctl stop collision-detection
+# Install Python and pip if not available
+echo "🐍 Installing Python dependencies..."
+sudo apt-get install -y python3 python3-pip python3-venv
 
-# Activate virtual environment
-source venv/bin/activate
+# Install system dependencies for OpenCV
+echo "📹 Installing OpenCV system dependencies..."
+sudo apt-get install -y \
+    libopencv-dev \
+    python3-opencv \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    libgstreamer1.0-0 \
+    libgstreamer-plugins-base1.0-0
 
-# Install computer vision dependencies
-echo "Installing computer vision dependencies..."
-echo "This may take several minutes..."
+# Create virtual environment
+echo "🔧 Creating Python virtual environment..."
+python3 -m venv collision_env
+source collision_env/bin/activate
 
-# Install OpenCV and dependencies
-pip install opencv-python==4.8.1.78
-pip install numpy==1.24.3
+# Upgrade pip
+pip install --upgrade pip
 
-# Install YOLO (ultralytics)
-pip install ultralytics==8.0.196
+# Install Python packages
+echo "📚 Installing Python packages..."
+pip install \
+    flask==2.3.3 \
+    flask-socketio==5.3.6 \
+    flask-cors==4.0.0 \
+    eventlet==0.33.3 \
+    python-dotenv==1.0.0 \
+    opencv-python==4.8.1.78 \
+    numpy==1.24.3 \
+    ultralytics==8.0.196 \
+    torch==2.0.1 \
+    torchvision==0.15.2 \
+    Pillow==10.0.1
 
-# Install additional dependencies for video processing
-pip install Pillow==10.0.1
-pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-echo "✓ Computer vision dependencies installed"
-
-# Copy your collision detection code
-echo "Setting up collision detection integration..."
-
-# Copy the realtime collision detection code to the project
-if [ -f "../realtime_collision_detection.py" ]; then
-    cp ../realtime_collision_detection.py ./collision_detection_core.py
-    echo "✓ Collision detection core copied"
-else
-    echo "⚠ realtime_collision_detection.py not found, using integrated version"
-fi
-
-# Download YOLO model if not present
-echo "Downloading YOLO model..."
-if [ ! -f "yolov8n.pt" ]; then
-    python3 -c "
-from ultralytics import YOLO
-print('Downloading YOLOv8 nano model...')
-model = YOLO('yolov8n.pt')
-print('✓ YOLO model downloaded successfully')
-"
-else
-    echo "✓ YOLO model already exists"
-fi
-
-# Backup current server and install new one
-echo "Installing enhanced video analysis server..."
-if [ -f "production_server.py" ]; then
-    cp production_server.py production_server_backup.py
-    echo "✓ Backup created: production_server_backup.py"
-fi
-
-# Copy new video analysis server
-cp ../scripts/gcp-video-analysis-server.py ./production_server.py
-chmod +x production_server.py
-echo "✓ Enhanced video analysis server installed"
-
-# Test the installation
-echo ""
-echo "=== Testing Installation ==="
-
+# Download YOLO model
+echo "🤖 Downloading YOLO model..."
 python3 -c "
-import sys
-print('Testing dependencies...')
-
-try:
-    import cv2
-    print(f'✓ OpenCV: {cv2.__version__}')
-except ImportError as e:
-    print(f'✗ OpenCV: {e}')
-    sys.exit(1)
-
-try:
-    import numpy as np
-    print(f'✓ NumPy: {np.__version__}')
-except ImportError as e:
-    print(f'✗ NumPy: {e}')
-    sys.exit(1)
-
-try:
-    from ultralytics import YOLO
-    print('✓ Ultralytics YOLO available')
-    
-    # Test model loading
-    import os
-    if os.path.exists('yolov8n.pt'):
-        model = YOLO('yolov8n.pt')
-        print('✓ YOLO model loads successfully')
-    else:
-        print('⚠ YOLO model file not found')
-        
-except ImportError as e:
-    print(f'✗ Ultralytics: {e}')
-    sys.exit(1)
-
-print('✅ All dependencies working correctly!')
+from ultralytics import YOLO
+import os
+model = YOLO('yolov8n.pt')
+print('YOLO model downloaded successfully')
 "
 
-if [ $? -ne 0 ]; then
-    echo "❌ Dependency test failed"
-    exit 1
-fi
+# Create necessary directories
+echo "📁 Creating directories..."
+mkdir -p /tmp/collision_uploads
+mkdir -p /tmp/collision_uploads/processed
+mkdir -p /home/$(whoami)/collision_logs
 
-# Start the enhanced service
-echo ""
-echo "Starting enhanced collision analysis service..."
+# Copy the collision detection server
+echo "🚀 Setting up collision detection server..."
+cp scripts/gcp-collision-integrated-server.py /home/$(whoami)/collision_server.py
+
+# Create environment file
+echo "⚙️ Creating environment configuration..."
+cat > /home/$(whoami)/.env << EOF
+# Collision Detection Server Configuration
+HOST=0.0.0.0
+PORT=5000
+SECRET_KEY=collision-detection-secret-$(date +%s)
+UPLOAD_FOLDER=/tmp/collision_uploads
+DEBUG=False
+ENVIRONMENT=production
+EOF
+
+# Create systemd service
+echo "🔧 Creating systemd service..."
+sudo tee /etc/systemd/system/collision-detection.service > /dev/null << EOF
+[Unit]
+Description=Collision Detection Server with Video Analysis
+After=network.target
+
+[Service]
+Type=simple
+User=$(whoami)
+WorkingDirectory=/home/$(whoami)
+Environment=PATH=/home/$(whoami)/collision_env/bin
+ExecStart=/home/$(whoami)/collision_env/bin/python collision_server.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=collision-detection
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start the service
+echo "🚀 Starting collision detection service..."
+sudo systemctl daemon-reload
+sudo systemctl enable collision-detection
 sudo systemctl start collision-detection
 
 # Wait for service to start
-sleep 8
+sleep 5
 
 # Check service status
-echo ""
-echo "=== Service Status ==="
-if sudo systemctl is-active --quiet collision-detection; then
-    echo "✅ Enhanced collision analysis server is running!"
-    
-    # Test the enhanced endpoints
-    sleep 3
-    if curl -s http://localhost:5000/api/health | grep -q "YOLO"; then
-        echo "✅ YOLO analysis functionality enabled!"
-    else
-        echo "⚠ Service running but YOLO analysis may not be fully enabled"
-    fi
-else
-    echo "❌ Service failed to start"
-    echo "Checking logs..."
-    sudo journalctl -u collision-detection --no-pager -l | tail -15
-    exit 1
-fi
+echo "📊 Checking service status..."
+sudo systemctl status collision-detection --no-pager
+
+# Test the server
+echo "🧪 Testing server..."
+sleep 2
+curl -s http://localhost:5000/api/health | python3 -m json.tool || echo "Server not responding yet, check logs"
+
+# Configure firewall
+echo "🔥 Configuring firewall..."
+sudo ufw allow 5000/tcp
+echo "Firewall rule added for port 5000"
+
+# Create simple test script
+echo "📝 Creating test script..."
+cat > /home/$(whoami)/test_collision_server.py << 'EOF'
+#!/usr/bin/env python3
+import requests
+import json
+
+def test_server():
+    try:
+        # Test health endpoint
+        response = requests.get('http://localhost:5000/api/health')
+        if response.status_code == 200:
+            data = response.json()
+            print("✅ Server is running!")
+            print(f"Status: {data['status']}")
+            print(f"Version: {data['version']}")
+            print(f"Features: {', '.join(data['features'])}")
+            return True
+        else:
+            print(f"❌ Server returned status code: {response.status_code}")
+            return False
+    except Exception as e:
+        print(f"❌ Error connecting to server: {e}")
+        return False
+
+if __name__ == "__main__":
+    test_server()
+EOF
+
+chmod +x /home/$(whoami)/test_collision_server.py
 
 echo ""
-echo "=== Collision Analysis Setup Complete! ==="
+echo "=== Collision Detection Setup Complete! ==="
 echo ""
-echo "🎉 Your server now includes:"
-echo "  ✅ YOLO v8 object detection"
-echo "  ✅ Real-time collision detection"
-echo "  ✅ Vehicle classification (car, truck, motorcycle, etc.)"
-echo "  ✅ Risk assessment and scoring"
-echo "  ✅ Frame-by-frame analysis"
-echo "  ✅ WebSocket real-time updates"
-echo "  ✅ Professional analysis interface"
+echo "🎉 Your collision detection server is now running!"
 echo ""
-echo "🌐 Access your enhanced collision detection system:"
-echo "   http://YOUR-EXTERNAL-IP:5000"
+echo "📍 Access your server at:"
+echo "   http://$(curl -s ifconfig.me):5000"
+echo "   http://localhost:5000 (local)"
 echo ""
-echo "📹 Upload a video and click 'Analyze for Collisions' to see:"
-echo "   • Vehicle detection and tracking"
-echo "   • Collision risk assessment"
-echo "   • Detailed analysis statistics"
-echo "   • Risk level classification"
+echo "🔧 Useful commands:"
+echo "   sudo systemctl status collision-detection    # Check status"
+echo "   sudo systemctl restart collision-detection   # Restart server"
+echo "   sudo journalctl -u collision-detection -f    # View logs"
+echo "   python3 test_collision_server.py             # Test server"
 echo ""
-echo "💡 Your collision detection code is now integrated!"
-echo "💡 To view logs: sudo journalctl -u collision-detection -f"
+echo "📁 Upload folder: /tmp/collision_uploads"
+echo "📁 Processed videos: /tmp/collision_uploads/processed"
+echo ""
+echo "✨ Features available:"
+echo "   • Video upload with drag & drop"
+echo "   • Real-time collision detection"
+echo "   • Bounding box visualization"
+echo "   • YOLO object detection"
+echo "   • Side-by-side video comparison"
+echo ""
+echo "🚀 Ready to analyze videos for collision detection!"
